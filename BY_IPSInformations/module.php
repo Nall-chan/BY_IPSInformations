@@ -1,6 +1,6 @@
 ﻿<?
 
-class IPSInformations extends IPSModule
+class IPSInfo extends IPSModule
 {
 
     public function Create()
@@ -36,7 +36,7 @@ class IPSInformations extends IPSModule
         $this->Update();
         $this->SetTimerInterval("ReadSysInfo", $this->ReadPropertyInteger("UpdateIntervall"));
     }
-
+    
     public function Update()
     {
         //Anzahl IPS Events ermitteln
