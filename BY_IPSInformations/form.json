@@ -2,7 +2,7 @@
   "elements":
   [
 
-    { "type": "IntervalBox", "name": "UpdateIntervall", "caption": "Minuten" },
+    { "type": "IntervalBox", "name": "UpdateIntervall", "caption": "Minuten" }
 
   ],
   "actions":
