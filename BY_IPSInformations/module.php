@@ -9,7 +9,7 @@ class IPSInfo extends IPSModule
         parent::Create();
         //These lines are parsed on Symcon Startup or Instance creation
         //You cannot use variables here. Just static values.
-        $this->RegisterPropertyInteger("UpdateIntervall", 60);
+        $this->RegisterPropertyInteger("Interval", 3600);
         $this->RegisterTimer("ReadSysInfo", 0, 'IPSInfo_Update($_IPS[\'TARGET\']);');
     }
 
@@ -43,7 +43,7 @@ class IPSInfo extends IPSModule
 
 
         $this->Update();
-        $this->SetTimerInterval("ReadSysInfo", $this->ReadPropertyInteger("UpdateIntervall"));
+        $this->SetTimerInterval("ReadSysInfo", $this->ReadPropertyInteger("Interval"));
     }
 
     public function Update()
