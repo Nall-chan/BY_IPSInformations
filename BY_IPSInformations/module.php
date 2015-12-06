@@ -1,5 +1,5 @@
 ﻿<?
-class IPSInformations extends IPSModule {
+class BY_IPSInformations extends IPSModule {
 
 	public function Create() {
 		//Never delete this line!
