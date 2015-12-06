@@ -34,18 +34,18 @@ class IPSInfo extends IPSModule
         $this->RegisterVariableInteger("IPSSkripte", "IPS Skripte");
         $this->RegisterVariableInteger("IPSVariablen", "IPS Variablen");
         $this->RegisterVariableInteger("IPSMedien", "IPS Medien");
-        $this->RegisterVariableInteger("IPSLibrarys","IPS Bibliotheken");
-        
+        $this->RegisterVariableInteger("IPSLibrarys", "IPS Bibliotheken");
+
         $this->RegisterVariableFloat("IPSScriptDirSize", "IPS Scripte in MB");
         $this->RegisterVariableFloat("IPSLogDirSize", "IPS Logs in MB");
         $this->RegisterVariableFloat("IPSDBSize", "IPS Datenbank in MB");
-        $this->RegisterVariableInteger("IPSStartTime", "Letzter IPS-Start","~UnixTimestamp");
+        $this->RegisterVariableInteger("IPSStartTime", "Letzter IPS-Start", "~UnixTimestamp");
 
-        
+
         $this->Update();
         $this->SetTimerInterval("ReadSysInfo", $this->ReadPropertyInteger("UpdateIntervall"));
     }
-    
+
     public function Update()
     {
         //Anzahl IPS Events ermitteln
@@ -80,25 +80,30 @@ class IPSInfo extends IPSModule
 
         //Anzahl IPS Librarys ermitteln
         $this->SetValueInteger("IPSLibrarys", count(IPS_GetLibraryList()));
-        
+
         // Groesse des Script-Verzeichnis
-        $this->SetValueFloat("IPSScriptDirSize", $this->GetDirSize(IPS_GetKernelDir()."scripts"));
-        
+        $this->SetValueFloat("IPSScriptDirSize", $this->GetDirSize(IPS_GetKernelDir() . "scripts"));
+
         // Groesse des Log-Verzeichnis
         $this->SetValueFloat("IPSLogDirSize", $this->GetDirSize(IPS_GetLogDir()));
 
         // Groesse des Datenbank-Verzeichnis
-        $this->SetValueFloat("IPSDBSize", $this->GetDirSize(IPS_GetKernelDir()."db"));
+        $this->SetValueFloat("IPSDBSize", $this->GetDirSize(IPS_GetKernelDir() . "db"));
 
         //Letzter IPS-Start
         $this->SetValueInteger("IPSStartTime", IPS_GetUptime());
-
     }
 
-    private function GetDirSize($dir)
+    private function GetDirSize($directory)
     {
-        return round(dirSize($dir)/1024/1024,2);
+        $size = 0;
+        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory)) as $file)
+        {
+            $size+=$file->getSize();
+        }
+        return round($size / 1024 / 1024, 2);
     }
+
     private function SetValueInteger($Ident, $value)
     {
         $id = $this->GetIDForIdent($Ident);
@@ -109,7 +114,7 @@ class IPSInfo extends IPSModule
         }
         return false;
     }
-    
+
     private function SetValueFloat($Ident, $value)
     {
         $id = $this->GetIDForIdent($Ident);
@@ -120,7 +125,7 @@ class IPSInfo extends IPSModule
         }
         return false;
     }
-    
+
     protected function RegisterTimer($Name, $Interval, $Script)
     {
         $id = @IPS_GetObjectIDByIdent($Name, $this->InstanceID);
