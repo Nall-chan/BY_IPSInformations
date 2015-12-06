@@ -1,0 +1,14 @@
+{
+    "id": "{17C3D925-5636-4E2B-AD7F-1428DFEA1878}",
+    "name": "IPSInformations",
+    "type": 3,
+    "vendor": "",
+    "aliases": 
+    [
+        "IPSInformations"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "IPSInfo"
+}

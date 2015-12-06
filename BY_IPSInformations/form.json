@@ -1,0 +1,14 @@
+{
+  "elements":
+  [
+
+    { "type": "IntervalBox", "name": "UpdateIntervall", "caption": "Minuten" },
+
+  ],
+  "actions":
+  [
+
+    { "type": "Button", "label": "Update", "onClick": "IPSInfo_Update($id);" }
+
+  ]
+}
