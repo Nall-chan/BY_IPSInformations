@@ -6,7 +6,7 @@ class IPSInformations extends IPSModule {
 		parent::Create();
 		//These lines are parsed on Symcon Startup or Instance creation
 		//You cannot use variables here. Just static values.
-		$this->RegisterPropertyInteger("UpdIntervall", 60);
+		$this->RegisterPropertyInteger("UpdateIntervall", 60);
 	}
 
 	public function ApplyChanges() {
@@ -28,7 +28,7 @@ class IPSInformations extends IPSModule {
 	public function Update() {
 		$InstanzID = $this->InstanceID;
 		$Timer_ID = @IPS_GetObjectIDByName("UpdateTimer", $InstanzID);
-		$Update_Intervall_Min = $this->ReadPropertyInteger("UpdIntervall");
+		$Update_Intervall_Min = $this->ReadPropertyInteger("UpdateIntervall");
 		if ($Timer_ID === false) {
 			$Timer_ID = IPS_CreateEvent(1);
 			IPS_SetParent($Timer_ID, $InstanzID);
