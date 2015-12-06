@@ -22,7 +22,6 @@ class IPSInformations extends IPSModule {
 		$this->RegisterVariableInteger("IPSProfile", "IPS Profile");
 		$this->RegisterVariableInteger("IPSSkripte", "IPS Skripte");
 		$this->RegisterVariableInteger("IPSVariablen", "IPS Variablen");
-		//$this->RegisterEventCyclic("UpdateTimer", "Automatische Aktualisierung", 600);
 		$this->Update();
 	}
 	
