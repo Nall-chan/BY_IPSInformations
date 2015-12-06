@@ -10,7 +10,7 @@ class IPSInfo extends IPSModule
         //These lines are parsed on Symcon Startup or Instance creation
         //You cannot use variables here. Just static values.
         $this->RegisterPropertyInteger("UpdateIntervall", 60);
-        $this->RegisterTimer("ReadSysInfo", 0, 'IPSInfo_Update($_IPS[\'TARGET\']);');
+        $this->RegisterTimer("ReadSysInfo", 0, 'Sys_IPSInfo($_IPS[\'TARGET\']);');
     }
 
     public function Destroy()
@@ -33,11 +33,20 @@ class IPSInfo extends IPSModule
         $this->RegisterVariableInteger("IPSProfile", "IPS Profile");
         $this->RegisterVariableInteger("IPSSkripte", "IPS Skripte");
         $this->RegisterVariableInteger("IPSVariablen", "IPS Variablen");
-        $this->Update();
+        $this->RegisterVariableInteger("IPSMedien", "IPS Medien");
+        $this->RegisterVariableInteger("IPSLibrarys","IPS Bibliotheken");
+        
+        $this->RegisterVariableFloat("IPSScriptDirSize", "IPS Scripte in MB");
+        $this->RegisterVariableFloat("IPSLogDirSize", "IPS Logs in MB");
+        $this->RegisterVariableFloat("IPSDBSize", "IPS Datenbank in MB");
+        $this->RegisterVariableInteger("IPSStartTime", "Letzter IPS-Start","~UnixTimestamp");
+
+        
+        $this->IPSInfo();
         $this->SetTimerInterval("ReadSysInfo", $this->ReadPropertyInteger("UpdateIntervall"));
     }
     
-    public function Update()
+    public function IPSInfo()
     {
         //Anzahl IPS Events ermitteln
         $this->SetValueInteger("IPSEvents", count(IPS_GetEventList()));
@@ -65,8 +74,31 @@ class IPSInfo extends IPSModule
 
         //Anzahl IPS Variablen ermitteln
         $this->SetValueInteger("IPSVariablen", count(IPS_GetVariableList()));
+
+        //Anzahl IPS Variablen ermitteln
+        $this->SetValueInteger("IPSMedien", count(IPS_GetMediaList()));
+
+        //Anzahl IPS Librarys ermitteln
+        $this->SetValueInteger("IPSLibrarys", count(IPS_GetLibraryList()));
+        
+        // Groesse des Script-Verzeichnis
+        $this->SetValueFloat("IPSScriptDirSize", $this->GetDirSize(IPS_GetKernelDir()."scripts"));
+        
+        // Groesse des Log-Verzeichnis
+        $this->SetValueFloat("IPSLogDirSize", $this->GetDirSize(IPS_GetLogDir()));
+
+        // Groesse des Datenbank-Verzeichnis
+        $this->SetValueFloat("IPSDBSize", $this->GetDirSize(IPS_GetKernelDir()."db"));
+
+        //Letzter IPS-Start
+        $this->SetValueInteger("IPSStartTime", IPS_GetUptime());
+
     }
 
+    private function GetDirSize($dir)
+    {
+        return round(dirSize($dir)/1024/1024,2);
+    }
     private function SetValueInteger($Ident, $value)
     {
         $id = $this->GetIDForIdent($Ident);
@@ -77,7 +109,18 @@ class IPSInfo extends IPSModule
         }
         return false;
     }
-
+    
+    private function SetValueFloat($Ident, $value)
+    {
+        $id = $this->GetIDForIdent($Ident);
+        if (GetValueFloat($id) <> $value)
+        {
+            SetValueFloat($id, $value);
+            return true;
+        }
+        return false;
+    }
+    
     protected function RegisterTimer($Name, $Interval, $Script)
     {
         $id = @IPS_GetObjectIDByIdent($Name, $this->InstanceID);
