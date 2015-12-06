@@ -1,4 +1,4 @@
-﻿<?
+<?
 
 class IPSInfo extends IPSModule
 {
